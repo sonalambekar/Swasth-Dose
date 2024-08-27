@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Checker</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2); /* Black with transparency */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 6px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variant: small-caps;
+  font-weight: bold;
+}
+
+.brand-title {
+  font-size: 1.5rem;
+  color: black;
+}
+
+.navbar-links ul {
+  list-style: none;
+}
+
+.navbar-links li {
+  display: inline-block;
+  padding: 0 20px;
+}
+
+.navbar-links a {
+  color: black;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: lighter;
+}
+
+.navbar-links a:hover {
+  color: black;
+}
+
+.toggle-button {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.toggle-button .bar {
+  width: 20px;
+  height: 2px;
+  background-color: black;
+  margin: 2px;
+  transition: all 0.3s;
+}
+
+@media (max-width: 768px) {
+  .toggle-button {
+      display: flex;
+  }
+  
+  .navbar-links {
+      display: none;
+      width: 100%;
+  }
+
+  .navbar-links ul {
+      width: 100%;
+      text-align: center;
+  }
+
+  .navbar-links li {
+      display: block;
+      padding: 15px 0;
+  }
+
+  .navbar-links.active {
+      display: block;
+  }
+}
+
+        .scheduler-container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2); /* Black with transparency */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-left: 600px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .form-group button {
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: black;
+        }
+
+        .medicine-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .medicine-table th, .medicine-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .medicine-table th {
+            background-color: black;
+            color: white;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #888;
+        }
+.main{
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 500px;
+}
+
+</style>
+<body>
+    <nav class="navbar">
+        <div class="brand-title">Swasth Dose</div>
+        <a href="javascript:void(0);" class="toggle-button" onclick="toggleMenu()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links" id="navbarLinks">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Tips</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main">
+    <div class="scheduler-container">
+        <h2>Medicine Scheduler</h2>
+        <form id="medicine-form">
+            <!-- Medicine Name -->
+            <div class="form-group">
+                <label for="medicine-name">Medicine Name:</label>
+                <input type="text" id="medicine-name" required>
+            </div>
+
+            <!-- Dosage -->
+            <div class="form-group">
+                <label for="dosage">Dosage (e.g., 1 tablet):</label>
+                <input type="text" id="dosage" required>
+            </div>
+
+            <!-- Time -->
+            <div class="form-group">
+                <label for="time">Time to Take:</label>
+                <input type="time" id="time" required>
+            </div>
+
+            <!-- Frequency -->
+            <div class="form-group">
+                <label for="frequency">Frequency:</label>
+                <select id="frequency" required>
+                    <option value="Once a day">Once a day</option>
+                    <option value="Twice a day">Twice a day</option>
+                    <option value="Thrice a day">Thrice a day</option>
+                    <option value="Every 4 hours">Every 4 hours</option>
+                    <option value="Every 6 hours">Every 6 hours</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit">Add Medicine</button>
+            </div>
+        </form>
+
+        <!-- Medicine Schedule Table -->
+        <table class="medicine-table" id="medicine-table">
+            <thead>
+                <tr>
+                    <th>Medicine Name</th>
+                    <th>Dosage</th>
+                    <th>Time</th>
+                    <th>Frequency</th>
+                </tr>
+            </thead>
+            <tbody id="medicine-table-body">
+                <tr>
+                    <td colspan="4" class="no-data">No medicines scheduled yet.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</body>
+<script>
+    document.getElementById('medicine-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get form values
+            const medicineName = document.getElementById('medicine-name').value;
+            const dosage = document.getElementById('dosage').value;
+            const time = document.getElementById('time').value;
+            const frequency = document.getElementById('frequency').value;
+
+            // Clear form fields
+            document.getElementById('medicine-name').value = '';
+            document.getElementById('dosage').value = '';
+            document.getElementById('time').value = '';
+            document.getElementById('frequency').selectedIndex = 0;
+
+            // Get table body
+            const tableBody = document.getElementById('medicine-table-body');
+
+            // Remove "No medicines scheduled yet." row if present
+            if (tableBody.querySelector('.no-data')) {
+                tableBody.innerHTML = '';
+            }
+
+            // Create new row
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${medicineName}</td>
+                <td>${dosage}</td>
+                <td>${time}</td>
+                <td>${frequency}</td>
+            `;
+
+            // Add new row to table
+            tableBody.appendChild(newRow);
+        });
+</script>
+</html>
